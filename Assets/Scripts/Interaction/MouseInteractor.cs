@@ -1,0 +1,26 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class MouseInteractor : MonoBehaviour
+{
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private float interactionDistance = 5f;
+
+    private void Update()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+            if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
+            {
+                InteractableButton button = hit.collider.GetComponent<InteractableButton>();
+
+                if (button != null)
+                {
+                    button.Press();
+                }
+            }
+        }
+    }
+}
