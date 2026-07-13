@@ -19,7 +19,8 @@ public class InteractableButton : MonoBehaviour
     {
         Practice,
         Exam,
-        Start
+        Start,
+        MedicalTool
     }
 
     [SerializeField] private ButtonType buttonType;
