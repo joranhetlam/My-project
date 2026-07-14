@@ -20,7 +20,8 @@ public class InteractableButton : MonoBehaviour
         Practice,
         Exam,
         Start,
-        MedicalTool
+        MedicalTool,
+        Patient
     }
 
     [SerializeField] private ButtonType buttonType;
@@ -51,6 +52,34 @@ public class InteractableButton : MonoBehaviour
 
             case ButtonType.Start:
                 MenuManager.Instance.StartTraining();
+                break;
+
+            case ButtonType.MedicalTool:
+
+                MedicalTool tool = GetComponent<MedicalTool>();
+
+                if (tool == null)
+                {
+                    Debug.LogError("MedicalTool component ontbreekt op " + gameObject.name);
+                    return;
+                }
+
+                tool.Select();
+
+                break;
+
+            case ButtonType.Patient:
+
+                PatientInteraction patient = GetComponent<PatientInteraction>();
+
+                if (patient == null)
+                {
+                    Debug.LogError("PatientInteraction component ontbreekt op " + gameObject.name);
+                    return;
+                }
+
+                patient.Interact();
+
                 break;
         }
     }

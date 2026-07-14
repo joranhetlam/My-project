@@ -9,7 +9,22 @@ public class MedicalTool : MonoBehaviour
         PulseOximeter
     }
 
-    [SerializeField] private ToolType toolType;
+    [SerializeField]
+    private ToolType toolType;
 
-    public ToolType Tool => toolType;
+    public ToolType Type => toolType;
+
+    public void Select()
+    {
+        GameManager.Instance.SelectTool(this);
+
+        PickupObject pickup =
+            GetComponent<PickupObject>();
+
+        pickup.Pickup(GameManager.Instance.HandPoint);
+
+        InformationBoardController.Instance.ToolSelected(toolType.ToString());
+
+        Debug.Log(toolType + " geselecteerd.");
+    }
 }

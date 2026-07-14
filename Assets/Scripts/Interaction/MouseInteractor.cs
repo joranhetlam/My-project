@@ -20,6 +20,13 @@ public class MouseInteractor : MonoBehaviour
                 {
                     button.Press();
                 }
+
+                TemperatureTarget target = hit.collider.GetComponent<TemperatureTarget>();
+
+                if (target != null)
+                {
+                    target.Interact();
+                }
             }
         }
     }
