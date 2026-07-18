@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public GameMode CurrentMode { get; private set; }
     public MedicalTool SelectedTool { get; private set; }
     public Transform HandPoint;
+    public bool TemperatureFinished;
+    public bool SaturationFinished;
+    public bool BloodPressureFinished;
 
     private void Awake()
     {
@@ -45,5 +48,12 @@ public class GameManager : MonoBehaviour
     public void ClearSelectedTool()
     {
         SelectedTool = null;
+    }
+
+    public bool TrainingFinished()
+    {
+        return TemperatureFinished &&
+               SaturationFinished &&
+               BloodPressureFinished;
     }
 }

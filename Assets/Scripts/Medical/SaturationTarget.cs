@@ -1,17 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class TemperatureTarget : MonoBehaviour
+public class SaturationTarget : MonoBehaviour
 {
-    public Transform ForeheadPoint;
+    public Transform FingerPoint;
 
-    [SerializeField]
-    private float measurementTime = 3f;
-    [SerializeField]
-    private float temperature = 36.8f;
+    [SerializeField] private float measurementTime = 3f;
 
-    [SerializeField]
-    private MedicalToolDisplay toolDisplay;
+    [SerializeField] private int saturation = 98;
+
+    [SerializeField] private MedicalToolDisplay toolDisplay;
 
     public void Interact()
     {
@@ -29,7 +27,7 @@ public class TemperatureTarget : MonoBehaviour
         PickupObject pickup =
             GameManager.Instance.SelectedTool.GetComponent<PickupObject>();
 
-        pickup.MoveToTarget(ForeheadPoint);
+        pickup.MoveToTarget(FingerPoint);
 
         float timer = measurementTime;
 
@@ -43,9 +41,9 @@ public class TemperatureTarget : MonoBehaviour
             yield return null;
         }
 
-        InformationBoardController.Instance.TemperatureFinished(temperature);
+        InformationBoardController.Instance.SaturationFinished(saturation);
         toolDisplay.ShowValue(
-            temperature.ToString("0.0") + " °C");
+            saturation.ToString("98") + " %");
 
         GameManager.Instance.SelectedTool.PlayMeasurementSound();
 

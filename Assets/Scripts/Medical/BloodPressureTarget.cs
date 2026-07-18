@@ -1,17 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-public class TemperatureTarget : MonoBehaviour
+public class BloodPressureTarget : MonoBehaviour
 {
-    public Transform ForeheadPoint;
+    public Transform ArmPoint;
+
+    [SerializeField] private float measurementTime = 3f;
 
     [SerializeField]
-    private float measurementTime = 3f;
-    [SerializeField]
-    private float temperature = 36.8f;
+    private string bloodPressure = "120 / 80";
 
-    [SerializeField]
-    private MedicalToolDisplay toolDisplay;
+    [SerializeField] private MedicalToolDisplay toolDisplay;
 
     public void Interact()
     {
@@ -29,7 +28,7 @@ public class TemperatureTarget : MonoBehaviour
         PickupObject pickup =
             GameManager.Instance.SelectedTool.GetComponent<PickupObject>();
 
-        pickup.MoveToTarget(ForeheadPoint);
+        pickup.MoveToTarget(ArmPoint);
 
         float timer = measurementTime;
 
@@ -43,9 +42,8 @@ public class TemperatureTarget : MonoBehaviour
             yield return null;
         }
 
-        InformationBoardController.Instance.TemperatureFinished(temperature);
-        toolDisplay.ShowValue(
-            temperature.ToString("0.0") + " °C");
+        InformationBoardController.Instance.BloodPressureFinished(bloodPressure);
+        toolDisplay.ShowValue(bloodPressure);
 
         GameManager.Instance.SelectedTool.PlayMeasurementSound();
 

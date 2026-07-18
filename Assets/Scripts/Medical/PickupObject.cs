@@ -12,6 +12,19 @@ public class PickupObject : MonoBehaviour
 
     public bool IsHeld => isHeld;
 
+    private bool isReturning = false;
+
+    [SerializeField]
+    private Vector3 heldRotationOffset;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+    }
+
     public void Pickup(Transform target)
     {
         if (isHeld)
@@ -30,6 +43,9 @@ public class PickupObject : MonoBehaviour
 
     private void Update()
     {
+        if (isReturning)
+            return;
+
         if (isMoving)
         {
             transform.position = Vector3.Lerp(
@@ -43,9 +59,7 @@ public class PickupObject : MonoBehaviour
                 Time.deltaTime * 8f);
 
             if (Vector3.Distance(transform.position, moveTarget.position) < 0.01f)
-            {
                 isMoving = false;
-            }
 
             return;
         }
@@ -58,9 +72,45 @@ public class PickupObject : MonoBehaviour
             handPoint.position,
             Time.deltaTime * 8f);
 
+        Quaternion targetRotation =
+            handPoint.rotation *
+            Quaternion.Euler(heldRotationOffset);
+
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
-            handPoint.rotation,
+            targetRotation,
             Time.deltaTime * 8f);
+    }
+
+    public void ReturnToStart()
+    {
+        isHeld = false;
+        isMoving = false;
+        isReturning = true;
+
+        StartCoroutine(ReturnRoutine());
+    }
+
+    private System.Collections.IEnumerator ReturnRoutine()
+    {
+        while (Vector3.Distance(transform.position, startPosition) > 0.01f)
+        {
+            transform.position = Vector3.Lerp(
+                transform.position,
+                startPosition,
+                Time.deltaTime * 8f);
+
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                startRotation,
+                Time.deltaTime * 8f);
+
+            yield return null;
+        }
+
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        isReturning = false;
     }
 }

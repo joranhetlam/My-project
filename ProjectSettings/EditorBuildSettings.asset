@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/VitalSignsScenario.unity
+    guid: bcd82d6d4db42dc4d96c5f7e754fbbb4
+  - enabled: 1
+    path: Assets/Scenes/TrainingHub.unity
+    guid: 2b42254a6ef964b4c95f28f1c2f0bd68
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

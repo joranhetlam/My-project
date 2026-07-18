@@ -10,6 +10,8 @@ public class InformationBoardController : MonoBehaviour
     public TMP_Text StatusText;
 
     private bool temperatureDone;
+    private bool saturationDone;
+    private bool bloodPressureDone;
 
     private void Awake()
     {
@@ -39,23 +41,68 @@ public class InformationBoardController : MonoBehaviour
             "Loop naar de patiënt.";
     }
 
-    public void TemperatureFinished()
+    public void ShowCountdown(float seconds)
     {
         InstructionText.text =
-            "Temperatuur gemeten.\n\n" +
-            "Resultaat: 36.8 °C";
+            "Temperatuur meten...\n\n" +
+            Mathf.CeilToInt(seconds);
+    }
 
+    public void TemperatureFinished(float value)
+    {
         temperatureDone = true;
 
+        InstructionText.text =
+            "Temperatuur gemeten!\n\n" +
+            value.ToString("0.0") + " °C";
+
+        GameManager.Instance.TemperatureFinished = true;
+
         UpdateStatus();
+        if (GameManager.Instance.TrainingFinished())
+        {
+            TrainingCompleteController.Instance.ShowTrainingComplete();
+        }
+    }
+
+    public void SaturationFinished(float value)
+    {
+        saturationDone = true;
+
+        InstructionText.text =
+            "Saturatie gemeten!\n\n98 %";
+
+        GameManager.Instance.SaturationFinished = true;
+
+        UpdateStatus();
+        if (GameManager.Instance.TrainingFinished())
+        {
+            TrainingCompleteController.Instance.ShowTrainingComplete();
+        }
+    }
+
+    public void BloodPressureFinished(string value)
+    {
+        bloodPressureDone = true;
+
+        InstructionText.text =
+            "Bloeddruk gemeten!\n\n120 / 80";
+
+        GameManager.Instance.BloodPressureFinished = true;
+
+        UpdateStatus();
+        if (GameManager.Instance.TrainingFinished())
+        {
+            TrainingCompleteController.Instance.ShowTrainingComplete();
+        }
     }
 
     private void UpdateStatus()
     {
         StatusText.text =
             "Status\n\n" +
-            (temperatureDone ? "[X]" : "[]") + " Temperatuur\n" +
-            "[] Saturatie\n" +
-            "[] Bloeddruk";
+            (temperatureDone ? "[X]" : "[ ]") + " Temperatuur\n" +
+            (saturationDone ? "[X]" : "[ ]") + " Saturatie\n" +
+            (bloodPressureDone ? "[X]" : "[ ]") + " Bloeddruk\n";
     }
 }

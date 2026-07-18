@@ -27,6 +27,30 @@ public class MouseInteractor : MonoBehaviour
                 {
                     target.Interact();
                 }
+
+                ReturnZone returnZone =
+                hit.collider.GetComponent<ReturnZone>();
+
+                if (returnZone != null)
+                {
+                    returnZone.Interact();
+                }
+
+                SaturationTarget saturationTarget =
+                hit.collider.GetComponent<SaturationTarget>();
+
+                if (saturationTarget != null)
+                {
+                    saturationTarget.Interact();
+                }
+
+                BloodPressureTarget bloodPressureTarget =
+                hit.collider.GetComponent<BloodPressureTarget>();
+
+                if (bloodPressureTarget != null)
+                {
+                    bloodPressureTarget.Interact();
+                }
             }
         }
     }
