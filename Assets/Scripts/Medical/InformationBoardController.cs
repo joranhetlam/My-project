@@ -20,7 +20,27 @@ public class InformationBoardController : MonoBehaviour
 
     private void Start()
     {
-        ShowDefault();
+        ResetBoard();
+
+        if (GameManager.Instance.CurrentMode == GameMode.Practice)
+        {
+            ShowDefault();
+        }
+        else
+        {
+            ShowExamBoard(300f);
+        }
+    }
+
+    public void ResetBoard()
+    {
+        temperatureDone = false;
+        saturationDone = false;
+        bloodPressureDone = false;
+
+        InstructionText.text = "";
+
+        UpdateStatus();
     }
 
     public void ShowDefault()
@@ -33,8 +53,28 @@ public class InformationBoardController : MonoBehaviour
         UpdateStatus();
     }
 
+    public void ShowExamBoard(float remainingTime)
+    {
+        int minutes = Mathf.FloorToInt(remainingTime / 60);
+        int seconds = Mathf.FloorToInt(remainingTime % 60);
+
+        InstructionText.text =
+            "EXAM\n\n" +
+            "Tijd resterend\n\n" +
+            minutes.ToString("00") + ":" + seconds.ToString("00");
+
+        StatusText.text =
+            "Meet:\n\n" +
+            "• Temperatuur\n" +
+            "• Saturatie\n" +
+            "• Bloeddruk";
+    }
+
     public void ToolSelected(string toolName)
     {
+        if (GameManager.Instance.CurrentMode == GameMode.Exam)
+            return;
+
         InstructionText.text =
             toolName +
             " geselecteerd.\n\n" +
@@ -43,20 +83,26 @@ public class InformationBoardController : MonoBehaviour
 
     public void ShowCountdown(float seconds)
     {
+        if (GameManager.Instance.CurrentMode == GameMode.Exam)
+            return;
+
         InstructionText.text =
             "Temperatuur meten...\n\n" +
-            Mathf.CeilToInt(seconds);
+            seconds;
     }
 
     public void TemperatureFinished(float value)
     {
         temperatureDone = true;
 
-        InstructionText.text =
-            "Temperatuur gemeten!\n\n" +
-            value.ToString("0.0") + " °C";
-
         GameManager.Instance.TemperatureFinished = true;
+
+        if (GameManager.Instance.CurrentMode == GameMode.Practice)
+        {
+            InstructionText.text =
+                "Temperatuur gemeten!\n\n" +
+                value.ToString("0.0") + " °C";
+        }
 
         UpdateStatus();
         if (GameManager.Instance.TrainingFinished())
@@ -69,12 +115,16 @@ public class InformationBoardController : MonoBehaviour
     {
         saturationDone = true;
 
-        InstructionText.text =
-            "Saturatie gemeten!\n\n98 %";
-
         GameManager.Instance.SaturationFinished = true;
 
+        if (GameManager.Instance.CurrentMode == GameMode.Practice)
+        {
+            InstructionText.text =
+                "Saturatie gemeten!\n\n98 %";
+        }
+
         UpdateStatus();
+
         if (GameManager.Instance.TrainingFinished())
         {
             TrainingCompleteController.Instance.ShowTrainingComplete();
@@ -85,12 +135,16 @@ public class InformationBoardController : MonoBehaviour
     {
         bloodPressureDone = true;
 
-        InstructionText.text =
-            "Bloeddruk gemeten!\n\n120 / 80";
-
         GameManager.Instance.BloodPressureFinished = true;
 
+        if (GameManager.Instance.CurrentMode == GameMode.Practice)
+        {
+            InstructionText.text =
+            "Bloeddruk gemeten!\n\n120 / 80";
+        }
+
         UpdateStatus();
+
         if (GameManager.Instance.TrainingFinished())
         {
             TrainingCompleteController.Instance.ShowTrainingComplete();
@@ -99,10 +153,22 @@ public class InformationBoardController : MonoBehaviour
 
     private void UpdateStatus()
     {
+        if (GameManager.Instance.CurrentMode == GameMode.Exam)
+            return;
+
         StatusText.text =
             "Status\n\n" +
             (temperatureDone ? "[X]" : "[ ]") + " Temperatuur\n" +
             (saturationDone ? "[X]" : "[ ]") + " Saturatie\n" +
             (bloodPressureDone ? "[X]" : "[ ]") + " Bloeddruk\n";
+    }
+
+    private void ResetDefault()
+    {
+        temperatureDone = false;
+        saturationDone = false;
+        bloodPressureDone = false;
+
+        UpdateStatus();
     }
 }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -70,5 +71,9 @@ public class MenuManager : MonoBehaviour
     public void StartTraining()
     {
         Debug.Log("Training gestart");
+
+        GameManager.Instance.ResetTraining();
+
+        SceneManager.LoadScene("VitalSignsScenario");
     }
 }

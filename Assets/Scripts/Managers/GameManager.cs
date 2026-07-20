@@ -17,6 +17,17 @@ public class GameManager : MonoBehaviour
     public bool SaturationFinished;
     public bool BloodPressureFinished;
 
+    public void ResetTraining()
+    {
+        TemperatureFinished = false;
+        SaturationFinished = false;
+        BloodPressureFinished = false;
+
+        SelectedTool = null;
+
+        Debug.Log("Training gereset");
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,6 +59,13 @@ public class GameManager : MonoBehaviour
     public void ClearSelectedTool()
     {
         SelectedTool = null;
+    }
+
+    public void SetHandPoint(Transform handPoint)
+    {
+        HandPoint = handPoint;
+
+        Debug.Log("Nieuwe HandPoint geregistreerd.");
     }
 
     public bool TrainingFinished()

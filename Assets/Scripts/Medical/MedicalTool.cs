@@ -33,20 +33,10 @@ public class MedicalTool : MonoBehaviour
 
     public void PlayMeasurementSound()
     {
-        Debug.Log("Geluid afspelen");
-
-        if (audioSource == null)
-        {
-            Debug.LogError("AudioSource is null!");
+        if (GameManager.Instance.CurrentMode == GameMode.Exam)
             return;
-        }
 
-        Debug.Log($"Clip: {audioSource.clip}");
-        Debug.Log($"Enabled: {audioSource.enabled}");
-        Debug.Log($"GameObject active: {audioSource.gameObject.activeInHierarchy}");
-
-        audioSource.Play();
-
-        Debug.Log($"Is playing: {audioSource.isPlaying}");
+        if (audioSource != null)
+            audioSource.Play();
     }
 }

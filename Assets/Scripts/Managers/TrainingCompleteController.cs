@@ -34,6 +34,18 @@ public class TrainingCompleteController : MonoBehaviour
         StartCoroutine(CountdownRoutine());
     }
 
+    public void ShowExamFailed()
+    {
+        if (trainingFinished)
+            return;
+
+        trainingFinished = true;
+
+        trainingCompleteCanvas.SetActive(true);
+
+        StartCoroutine(ExamFailedRoutine());
+    }
+
     private IEnumerator CountdownRoutine()
     {
         DisablePlayer();
@@ -42,8 +54,41 @@ public class TrainingCompleteController : MonoBehaviour
 
         while (timer > 0)
         {
+            if (GameManager.Instance.CurrentMode == GameMode.Practice)
+            {
+                completeText.text =
+                    "TRAINING VOLTOOID!\n\n" +
+                    "Je wordt teruggestuurd naar de TrainingHub...\n\n" +
+                    Mathf.Ceil(timer);
+            }
+            else
+            {
+                completeText.text =
+                    "EXAMEN GESLAAGD!\n\n" +
+                    "Alle metingen zijn succesvol uitgevoerd.\n\n" +
+                    "Je wordt teruggestuurd naar de TrainingHub...\n\n" +
+                    Mathf.Ceil(timer);
+            }
+
+            timer -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        SceneManager.LoadScene(trainingHubScene);
+    }
+
+    private IEnumerator ExamFailedRoutine()
+    {
+        DisablePlayer();
+
+        float timer = countdownTime;
+
+        while (timer > 0)
+        {
             completeText.text =
-                "TRAINING VOLTOOID!\n\n" +
+                "EXAMEN GEFAALD\n\n" +
+                "De tijd is verstreken.\n\n" +
                 "Je wordt teruggestuurd naar de TrainingHub...\n\n" +
                 Mathf.Ceil(timer);
 
